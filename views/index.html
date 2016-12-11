@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  </head>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro|Titillium+Web" rel="stylesheet">
+  <style>
+    body{
+      font-family: 'Titillium Web', sans-serif;
+    }
+  </style>
+  <style type="text/css">
+    #wordCloudSelector{
+      background: transparent;
+      font-size:1rem;
+      width:15vw;
+      border-radius:0;
+      text-align:center;
+      outline: none;
+      padding:1vw 1vh 1vw 1vh;
+    }
+    #monthlyRatingSelector{
+      background: transparent;
+      font-size:1rem;
+      width:15vw;
+      border-radius:0;
+      text-align:center;
+      outline: none;
+      padding:1vw 1vh 1vw 1vh;
+    }
+    .bar:hover{
+      fill: black
+    }
+    .axis {
+
+      shape-rendering: crispEdges;
+    }
+   .scatterPlotAxis text {
+      font-size: 10px
+    }
+    .barChartAxis text {
+      font-size: 14px
+    }
+   .axis path {
+      fill: none;
+      stroke: #000;
+    }
+    </style>
+  <body>
+  <section  style="text-align:center;width:100vw;">
+    <h1>Porto’s Bakery & Cafe Yelp Review Analysis</h1>
+    <br />
+    <div style="text-align:left; width:60vw;margin-left:20vw">
+      <span>Porto’s Bakery & Cafe is a Burbank based restaurant and it's got <span style="font-weight:bold">5000+</span> yelp reviews which gives me the opportunity to find out:</span>
+      <ul>
+        <li> What do customers like or dislike about this restaurant?</li>
+        <li> How does its rating vary in different time of a year?</li>
+        <li> What are the commom topics in the reviews?</li>
+        <li> Can we make predictions about a future customer's rating based on his/her review?</li>
+      </ul>
+      <p>To answer these questions, I made use of data scraping, text mining and data visualisation techniques to gain a better perspective.</p>
+    </div>
+  </section>
+  <br />
+  <section style="text-align:center;width:100vw;">
+    <div>
+    <div style="text-align:left; width:60vw;margin-left:20vw">
+      <h2>Words do matter!</h2>
+      <p>In this section, I performed word counting on the reviews and also <span style="font-weight:bold">weighted rating</span> for each candidate word that shows the weighted average rating of reviews containing the very word.</p>
+      <p>And the word cloud below shows the result.</p>
+    </div>
+    <select id="wordCloudSelector">
+      <option value="all">High freq. words </option>
+      <option value="positive">Positive words</option>
+      <option value="negative">Negative words</option>
+    </select>
+    </div>
+    <br />
+    <svg id="wordCloud"></svg>
+    <div style="text-align:left; width:60vw;margin-left:20vw">
+      <p>We could see that the most frequent words are: <span style="font-style:italic;font-size:larger">cheese, good, potato, great, food, pastries...</span></p>
+      <p>And those frequent positive words are: <span style="font-style:italic;font-size:larger">sounded, impeccable, amaze, king, delight, speechless...</span></p>
+      <p>Negative words also: <span style="font-style:italic;font-size:larger">manager, horrible, rude, manage, disappointing...</span></p>
+      <p>I may guess that, although its general rating is high and food is authentically tasty, its management somehow fails to satisfy certain people.</p>
+    </div>
+  </section>
+  <br />
+  <br />
+  <section style="text-align:center;width:100vw;">
+    <div style="text-align:left; width:35vw;margin-left:20vw;margin-bottom:-50vh;margin-top:10vh">
+      <h2>Plot them all!</h2>
+      <p>Since the above section only gives us a glimpse at data in a bipolar way, we want to 
+      get a general sense about the reviews on word level, especially those neutral words. So I
+      drew a scatter plot to capture all the 5000 candidate words.</p>
+      <p>Notice that this graph is overplotted, however, if we use fewer number of candidate words
+       we could possibly miss important negative words (unprofessional, miserable, for example) with relatively low #reviews.</p>
+       <p>To alleviate the overplotting mess, I jittered thoes text on the bottom. Don't have significant change on the view though...</p>
+    </div>
+    <svg id="scatterPlot"></svg>
+  </section>
+  
+  <section style="text-align:center;width:100vw;">
+      <div style="text-align:center;width:100vw;margin-bottom:50px" >
+        <div style="text-align:left; width:60vw;margin-left:20vw">
+          <h2>Rating varies over time</h2>
+          <p>In this section, we are interested in find how ratings vary monthly and compare them with seasonal average to gain more understanding on the reviews.</p>
+        </div>
+        <select id="monthlyRatingSelector">
+          <option selected value="default">Default</option>
+          <option value="asc">Ascending</option>
+          <option value="des">Descending</option>
+          <option value="top">Top 5</option>
+          <option value="bottom">Bottom 5</option>
+        </select>
+      </div>
+      <svg id="barChart"></svg>
+      <div style="text-align:left; width:60vw;margin-left:20vw">
+          <p>We can see from the above bar chart, summer has the highest average rating while fall owns the lowest.Maybe the milder the weather is, the less likely people would like to eat out? Just a guess...</p>
+        </div>
+    </section>
+  <section style="text-align:center;width:100vw;">
+    <div style="text-align:left; width:60vw;margin-left:20vw">
+      <h2>Topic discovery</h2>
+      <p>To discover possible topics(represented by key words) in reviews, Non-negative Matrix Factorization would be a good fit for vectorized text(TF-IDF in this case). And here are the resulting 5 possible topics:</p>
+    </div>
+    <div style="color:blue">
+      <h3>Topic #1</h3>
+      <p style="font-size:larger">porto line time good just like order sandwich really parking</p>
+    </div>
+    <div style="color:green">
+      <h3>Topic #2</h3>
+      <p style="font-size:larger">cheese rolls guava roll love dozen pastries pastry strudels favorite</p>
+    </div>
+    <div style="color:red">
+      <h3>Topic #3</h3>
+      <p style="font-size:larger">great love place food amazing service pastries long worth lines</p>
+    </div>
+    <div style="color:orange">
+      <h3>Topic #4</h3>
+      <p style="font-size:larger">cake chocolate best cakes birthday tres mousse leches mango fruit</p>
+    </div>
+    <div style="color:purple">
+      <h3>Topic #5</h3>
+      <p style="font-size:larger">potato balls meat chicken sandwich pies ball sandwiches delicious cuban</p>
+    </div>
+    <div style="text-align:left; width:60vw;margin-left:20vw">
+      <p></p>
+    </div>
+  </section>
+<br />
+<br />
+  
+ <section style="text-align:center;width:100vw;">
+    <div style="text-align:center;width:100vw;margin-bottom:50px" >
+      <div style="text-align:left; width:60vw;margin-left:20vw">
+        <h2>Rating prediction</h2>
+        <p>In this section, four supervised learning tasks using different classification model are conducted based on the reviews and ratings to help us predict customers' sentiments.I seperated data(5200 reviews) into 4000(randomly sampled) for training and 1200 for testing.The results are shown below:</p>
+      </div>
+    </div>
+    <div style="text-align:center; width:60.5vw;margin-left:20vw">
+       <div style="width:30vw;display:inline-block">
+        <div id="confusionMatrix_NB" style="width:30vw">
+        </div>
+        <p>Multinominal Naive Bayes</p>
+      </div>
+      <div style="width:30vw;display:inline-block">
+        <div id="confusionMatrix_NN" style="width:30vw">
+        </div>
+        <p>Neural Network (Multi Layer Perceptron)</p>
+      </div>
+      <div style="width:30vw;display:inline-block">
+        <div id="confusionMatrix_DT" style="width:30vw">
+        </div>
+        <p>Decision Tree</p>
+      </div>
+      <div style="width:30vw;display:inline-block">
+        <div id="confusionMatrix_RF" style="width:30vw">
+        </div>
+        <p>Random Forest</p>
+      </div>
+    </div>
+    <div style="text-align:left; width:60vw;margin-left:20vw">
+        <p>As we can see, Naive Bayes model and MLP behave similarly in that, firstly, they have higher accuracy of 70.25% and 71.08% respectively, and secondly, they tend to mispredict higher ratings than they actually are.</p>
+        <p>Decision Tree and Random Forest have lowerer classification accuracy, but they don't always predict a 5 star rating as Naive Bayes model and MLP do.</p>
+      </div>
+  </section>
+
+  <br />
+  <br />
+  <section>
+    <div style="width:60vw;margin-bottom:50px;margin-left:20vw" >
+      <h2 id="clickForMore"  style="color:red;cursor:pointer">More interesting discoveries...</h2>
+      <div id="moreBody" style="display:none">
+        <p>Initially, I tried to perform a clustering task on the 5000+ reviews.So I vectorized each review content in 5000-dimention and reduced it to 3 dimention for the purpose to visualize each review.</p>
+        <p>And I got this:</p>
+        <img src="images/3D_all_data.png" style="width:60vw"/>
+        <p>It looks like an elliptic parabaloid except for the dot which I will talk about later.</p>
+        <p>Since the plot is too crammed, I sampled 300 reviews to get a better view:</p>
+        <img src="images/3D_sampled_300.png" style="width:60vw"/>
+        <p>Further, I reduced the reviews vector into 2D:(all reviews on the left and sampled on the right)</p>
+        <img src="images/2D_all_data.png" style="width:29.5vw;display:inline-block"/>
+        <img src="images/2D_sampled_300.png" style="width:29.5vw;display:inline-block"/>
+        <p>Pretty much like a quadratic curve.</p>
+        <p>Then I am curious if the reviews somehow clustered by thier ratings:</p>
+        <p>(z axix denotes ratings)</p>
+        <img src="images/reduced_dimention_wz_rating.png" style="width:60vw"/>
+        <p>No apparent patterns found T.T</p>
+        <p>Still don't know why this quadratic behavior happens on the reviews</p>
+        <br />
+        <p>And lastly, as for the 2 'ouliers', they are just short reviews constructed without the words in the bag(I vectorized text unigramly). They are:</p>
+        <p style="font-style:italic">'I fux wit it!' posted by Jamaal A. on 11/23/2013</p>
+        <p style="font-style:italic">'With Shawn and Zane' posted by John N. on 7/26/2013</p>
+      </div>
+      
+    </div>
+    
+  </section>
+  
+  </body>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.0/d3.js"></script>
+  <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+  <script>
+    $('#clickForMore').on('click',function(){
+      $('#moreBody').css({'display':'block'})
+    })
+    function wordCloud(selector) {
+
+    var fill = d3.scale.category20();
+
+    //Construct the word cloud's SVG element
+    var svg = d3.select(selector).select("#wordCloud")
+        .attr("width", 800)
+        .attr("height", 600)
+        .style('display','inline-block')
+        .append("g")
+        .attr("transform", "translate(400,300)");
+
+
+    //Draw the word cloud
+    function draw(words) {
+        var cloud = svg.selectAll("g text")
+                        .data(words, function(d) { return d.text; })
+
+        //Entering words
+        cloud.enter()
+            .append("text")
+            .style("font-family", 'Source Code Pro')
+            .style("fill", function(d, i) { return fill(i); })
+            .attr("text-anchor", "middle")
+            .attr('font-size', 1)
+            .text(function(d) { return d.text; });
+
+        //Entering and existing words
+        cloud
+            .transition()
+                .duration(600)
+                .style("font-size", function(d) { return d.size + "px"; })
+                .attr("transform", function(d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .style("fill-opacity", 1);
+
+        //Exiting words
+        cloud.exit()
+            .transition()
+                .duration(200)
+                .style('fill-opacity', 1e-6)
+                .attr('font-size', 1)
+                .remove();
+    }
+
+
+    //Use the module pattern to encapsulate the visualisation code. We'll
+    // expose only the parts that need to be public.
+    return {
+
+        //Recompute the word cloud for a new set of words. This method will
+        // asycnhronously call draw when the layout has been computed.
+        //The outside world will need to call this function, so make it part
+        // of the wordCloud return value.
+        update: function(words) {
+            d3.layout.cloud().size([800, 600])
+                .words(words)
+                .padding(5)
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw)
+                .start();
+        }
+    }
+
+}
+function showNewWords(vis, wordList) {
+    vis.update(wordList)
+}
+
+/*
+
+
+Scatter Plot
+
+
+*/
+var filteredWordRating_positive = []
+var filteredWordRating_negative = []
+d3.csv('data/wordRatings_wz_Counts.csv',function(d){
+  //Grab data for word count
+  console.log(d.length);
+  for (var i=0; i<d.length;i++){
+    if (parseInt(d[i].count)>5) {
+      if (i<500){
+        filteredWordRating_positive.push(d[i])
+      }
+      if (i>d.length-200){
+        filteredWordRating_negative.push(d[i])
+      } 
+    }
+
+  }
+  //Set up scales
+    //Get maxof count and rating
+    max_count = Math.max.apply(null,d.map(function(el){
+      return el.count
+    }))
+    min_count = Math.min.apply(null,d.map(function(el){
+      return el.count
+    }))
+    max_rating = Math.max.apply(null,d.map(function(el){
+      return el.rating
+    }))
+    
+
+    var countScale = d3.scale.log().base(10)
+                    .domain([min_count,max_count+1000])
+                    .range([570,0])
+    var ratingScale = d3.scale.linear()
+    .domain([1,max_rating])
+    .range([30,900])
+  //axis
+  var count_axis = d3.svg.axis()
+                    .scale(countScale)
+                    .orient('left')
+                    .tickFormat(function(d) { return parseInt(d); })
+                    .ticks(3)
+                    .tickValues([10,100,1000])
+  var rating_axis = d3.svg.axis()
+                    .orient('bottom')
+                    .scale(ratingScale)
+                    .ticks(5)
+  // Drawing scatter plot
+  var svg = d3.select("body").select("#scatterPlot")
+            .attr("viewBox", '0 0 960 650')
+            .attr('preserveAspectRatio',"xMidYMid meet")
+            .attr('width','90vw');      
+  svg.selectAll("text")
+   .data(d)
+   .enter()
+   .append("text")
+   .text(function(d){
+    return d.word
+   })
+   .style('opacity','.8')
+   .attr("x", function(d) {
+            var val = ratingScale(d.rating)
+            if (d.count<10){
+              val += (Math.random()*2-1)*30
+            }
+            return  val;
+       })
+       .attr("y", function(d) {
+            var val = countScale(d.count)-1
+            if (d.count<10){
+              val += (Math.random()*2-1)*20
+            }
+            return  val;
+       })
+    .attr("font-family", "sans-serif")
+   .attr("font-size", "8px")
+   .attr("fill", "red");
+
+        
+    svg.selectAll("circle")
+     .data(d)
+     .enter()
+     .append("circle")
+     .attr("cx", function(d) {
+            return ratingScale(d.rating);
+       })
+       .attr("cy", function(d) {
+            
+            return countScale(d.count);
+       })
+       .attr("r", 1.5);
+
+    
+   //add axises
+   svg.append('g')
+   .attr("transform", "translate(960,0)")
+   .attr('class','axis scatterPlotAxis count_axis')
+    .call(count_axis);
+
+    svg.append('g')
+   .attr("transform", "translate(0,585)")
+   .attr('class','axis scatterPlotAxis rating_axis')
+    .call(rating_axis);
+
+    svg.append("text")      // text label for the x axis
+          .attr("x", 480 )
+          .attr("y", 620 )
+          .style("text-anchor", "middle")
+          .text("Rating");
+    svg.append("text")      // text label for the y axis
+          .attr("x", 900 )
+          .attr("y", 20 )
+          .style("text-anchor", "middle")
+          .text("#Reviews");
+
+
+})
+/*
+
+
+Word Cloud
+
+
+*/
+//Create a new instance of the word cloud visualisation.
+var myWordCloud = wordCloud('body');
+
+$('#wordCloudSelector').change(function(){
+  var val = $('#wordCloudSelector').val()
+  if (val !== 'all'){
+      var wordList =[]
+      if (val == 'positive'){
+        for (i in filteredWordRating_positive){
+          wordList.push({'text':filteredWordRating_positive[i].word, 'size':filteredWordRating_positive[i].count*4})
+        } 
+      }else if (val == 'negative'){
+        for (i in filteredWordRating_negative){
+          wordList.push({'text':filteredWordRating_negative[i].word, 'size':filteredWordRating_negative[i].count*2})
+        } 
+      }
+      //Start cycling through the demo data
+      showNewWords(myWordCloud,wordList);
+
+  }else{
+      d3.csv('data/wordFrequency.csv',function(d){
+      var wordList = d.map(function(d){
+        return {'text': d.word, "size": 0.5*parseFloat(d['tf-idf'])}
+      })
+
+      //Start cycling through the demo data
+      showNewWords(myWordCloud,wordList);
+
+    })
+  }
+  
+}).change()
+/*
+
+
+Bar chart
+
+
+*/
+ 
+  function updateBarChart(svg,data,x,y){
+       var monthMap =[null,'Jan.','Feb.','Mar.','Apr.','May','June','July','Aug.','Sep.','Oct.','Nov.','Dec.']
+      var bar = svg.selectAll(".bar")
+        .data(data);
+        
+        // new x domain:
+        if (data.length<12) {
+          x.domain(data.map(d => d.month))
+          .rangeBands([80, 900],.7,.4);
+        }else{
+          x.domain(data.map(d => d.month))
+          .rangeBands([80, 900],.4,.1);
+        }
+
+        bar.enter().append("rect")
+           .attr("class", "bar")
+           .attr('fill','grey')
+           .style('opacity','.8')
+           .attr("x", function(d) { return x(d.month); })
+           .attr("y", function(d) { return y(d.rating); })
+           .attr("height", function(d) { return 580 - y(d.rating); })
+           .attr("width", x.rangeBand())
+           
+
+        // removed redundant data:
+        bar.exit().remove();
+        
+        // updated data:
+        bar
+            .transition().duration(750)
+            .attr("x", function(d) { return x(d.month); })
+            .attr("width", x.rangeBand())
+           .attr("y", function(d) { return y(d.rating); })
+           .attr("height", function(d) { return 580 - y(d.rating); })
+           //tooltip
+           
+        bar.on('mouseover',function(d){
+              svg.append('text')
+              .attr('class','tooltip')
+              .attr('x', x(d.month))
+              .attr('y',y(d.rating)-5)
+              .style('fill','black')
+              .text(d.rating.substring(0,5))
+           })
+           .on('mouseout',function(d){
+              svg.select('.tooltip').remove()
+           });
+ 
+          svg.select(".x.axis").transition().duration(1000)
+          .call(d3.svg.axis().orient('bottom').scale(x).tickFormat(function(d){return monthMap[d]}));
+    }
+
+
+  d3.csv('data/monthlyRating.csv',function(d){
+   
+    var data = d.slice()
+    var svg = d3.select("body").select("#barChart")
+            .attr("viewBox", '0 0 960 650')
+            .attr('preserveAspectRatio',"xMidYMid meet")
+            .attr('width','60vw');   
+
+    //Scalers
+    var x = d3.scale.ordinal()
+      .domain(data.map(d => d.month))
+      .rangeBands([80, 900],.4,.1);
+
+    var y = d3.scale.linear()
+      .domain([4.4, Math.max(...data.map(d => d.rating))])
+      .range([580, 30]);
+    
+    //Draw bars
+    svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr('fill','grey')
+      .style('opacity','.8')
+      .attr("x", function(d) { return x(d.month); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.rating); })
+      .attr("height", function(d) { return 580 - y(d.rating); })
+
+
+      // add the x Axis
+      svg.append("g")
+      .attr("class", "x axis barChartAxis")
+      .attr("transform", "translate(0," + 580 + ")")
+      .call(d3.svg.axis().orient('bottom').scale(x));
+
+      // add the y Axis
+      svg.append("g")
+      .attr("class", "y axis barChartAxis")
+      .attr("transform", "translate(80,0)")
+      .call(d3.svg.axis().orient('left').scale(y).ticks(10));
+
+    svg.append("text")      // text label for the x axis
+          .attr("x", 480 )
+          .attr("y", 620 )
+          .style("text-anchor", "middle")
+          .text("Month");
+    svg.append("text")      // text label for the y axis
+          .attr("x", -300 )
+          .attr("y", 20 )
+          .style("text-anchor", "middle")
+          .attr('transform','rotate(-90)')
+          .text("Rating");
+
+    //Draw aux lines
+      //var ratingSum = data.map(d => d.rating).reduce((a,b) => parseFloat(a)+parseFloat(b),0)
+      //var avgRating = ratingSum*1.0/12
+    var auxLine_data = [
+      {'name':'Avg.','val':4.558},
+      {'name':'Spring','val':4.539},
+      {'name':'Summer','val':4.618},
+      {'name':'Fall','val':4.488},
+      {'name':'Winter','val':4.596}
+     ]
+     var seasonColorMap = {
+        'Avg.':'red',
+        'Spring': 'green',
+        'Summer': 'orange',
+        'Fall':'brown',
+        'Winter':'blue'
+     }
+    svg.selectAll('div')
+    .data(auxLine_data)
+    .enter()
+    .append('line')
+        .attr('class', 'line')
+        .attr('x1',80)
+        .attr('y1',function(d){ return y(d.val)})
+        .attr('x2',900)
+        .attr('y2',function(d){return y(d.val)})
+        .attr('stroke-dasharray','10,15')
+        .style('stroke',function(d){
+          return seasonColorMap[d.name]
+        })
+        .style('stroke-width',function(d){
+          if (d.name == 'Avg.'){
+            return 2.5
+          }else{
+            return 1
+          }
+        })
+        svg.selectAll('div')
+          .data(auxLine_data)
+          .enter()
+          .append("text")      // text label for the avg line
+          .attr("x", 930 )
+          .attr("y", function(d){return y(d.val)})
+          .style('fill',function(d){
+              return seasonColorMap[d.name]
+            })
+          .style("text-anchor", "middle")
+          .text(function(d){return d.name});
+
+    $('#monthlyRatingSelector').change(function(){
+        var val = $('#monthlyRatingSelector').val()
+        var changedData = data
+        switch (val){
+          case 'asc':
+              changedData.sort((a,b) => a.rating - b.rating)
+              break
+          case 'des':
+              changedData.sort((a,b) => b.rating-a.rating)
+              break
+          case 'bottom':
+              changedData = changedData.sort((a,b) => a.rating - b.rating).slice(0,5)
+              break
+          case 'top':
+              changedData = changedData.sort((a,b) => b.rating - a.rating).slice(0,5)
+              break
+          case 'default':
+              changedData.sort((a,b) => a.month - b.month)
+              break
+          default:
+              changedData = data
+        }
+        updateBarChart(svg,changedData,x,y)
+    }).change()
+})
+/*
+
+
+Confusion Matrix
+
+
+
+*/
+function Matrix(options) {
+  
+  var margin = {top: 100, right: 100, bottom: 100, left: 100},
+      width = 400,
+      height = 400,
+      data = options.data,
+      container = options.container,
+      labelsData = options.labels,
+      numrows,
+      numcols;
+
+  if(!data){
+    throw new Error('No data passed.');
+  }
+
+  if(!Array.isArray(data) || !data.length || !Array.isArray(data[0])){
+    throw new Error('Data type should be two-dimensional Array.');
+  }
+
+  numrows = data.length;
+  numcols = data[0].length;
+  
+  var flatten_array = [].concat.apply([], data)
+  var max_val = Math.max.apply(null, flatten_array)
+  var min_val = Math.min.apply(null, flatten_array)
+
+  var svg = d3.select(container).append("svg")
+      .attr("viewBox", '0 0 600 600')
+      .attr('preserveAspectRatio',"xMidYMid meet")
+      //.attr("width", width + margin.left + margin.right)
+      //.attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("text")      // text label for the x axis
+          .attr("x", 200 )
+          .attr("y", 480 )
+          .style("text-anchor", "middle")
+          .text("Predicted rating");
+    svg.append("text")      // text label for the y axis
+          .attr("x", -200 )
+          .attr("y", -60 )
+          .style("text-anchor", "middle")
+          .attr('transform','rotate(-90)')
+          .text("Actual rating");
+
+  var background = svg.append("rect")
+      .style("stroke", "black")
+      .style("stroke-width", "2px")
+      .attr("width", width)
+      .attr("height", height);
+
+
+  var x = d3.scale.ordinal()
+      .domain(d3.range(numcols))
+      .rangeBands([0, width]);
+
+  var y = d3.scale.ordinal()
+      .domain(d3.range(numrows))
+      .rangeBands([0, height]);
+
+  var colorMap = d3.scale.log()
+      .domain([min_val+1, max_val+1])
+      .range(['#f7fbff','#08306b']);    
+
+  var row = svg.selectAll(".row")
+      .data(data)
+      .enter().append("g")
+      .attr("class", "row")
+      .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
+
+  var cell = row.selectAll(".cell")
+      .data(function(d) { return d; })
+      .enter().append("g")
+      .attr("class", "cell")
+      .attr("transform", function(d, i) { return "translate(" + x(i) + ", 0)"; });
+
+  cell.append('rect')    
+      .attr("width", x.rangeBand())
+      .attr("height", y.rangeBand())
+      .style("stroke-width", 0);
+
+    cell.append("text")
+      .attr("dy", ".32em")
+      .attr("x", x.rangeBand() / 2)
+      .attr("y", y.rangeBand() / 2)
+      .attr("text-anchor", "middle")
+      .style("fill", function(d, i) { return d >= 5 ? 'white' : 'grey'; })
+      .text(function(d, i) { return d; });
+
+  row.selectAll(".cell")
+      .data(function(d, i) { return data[i]; })
+      .style("fill", colorMap);
+
+  var labels = svg.append('g')
+    .attr('class', "labels");
+
+  var columnLabels = labels.selectAll(".column-label")
+      .data(labelsData)
+    .enter().append("g")
+      .attr("class", "column-label")
+      .attr("transform", function(d, i) { return "translate(" + x(i) + "," + height + ")"; });
+
+  columnLabels.append("line")
+    .style("stroke", "black")
+      .style("stroke-width", "1px")
+      .attr("x1", x.rangeBand() / 2)
+      .attr("x2", x.rangeBand() / 2)
+      .attr("y1", 0)
+      .attr("y2", 5);
+
+  columnLabels.append("text")
+      .attr("x", 6)
+      .attr("y", y.rangeBand() / 2)
+      .attr("dy", ".32em")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-60)")
+      .text(function(d, i) { return d; });
+
+  var rowLabels = labels.selectAll(".row-label")
+      .data(labelsData)
+    .enter().append("g")
+      .attr("class", "row-label")
+      .attr("transform", function(d, i) { return "translate(" + 0 + "," + y(i) + ")"; });
+
+  rowLabels.append("line")
+    .style("stroke", "black")
+      .style("stroke-width", "1px")
+      .attr("x1", 0)
+      .attr("x2", -5)
+      .attr("y1", y.rangeBand() / 2)
+      .attr("y2", y.rangeBand() / 2);
+
+  rowLabels.append("text")
+      .attr("x", -8)
+      .attr("y", y.rangeBand() / 2)
+      .attr("dy", ".32em")
+      .attr("text-anchor", "end")
+      .text(function(d, i) { return d; });
+}
+var labels = ['5 star', '4 star', '3 star', '2 star', '1 star'];
+var confusionMatrix_NB = [[840, 0, 0, 0, 0], [251, 3, 0, 0, 0], [60, 1, 0, 0, 0], [16, 0, 0, 0, 0], [29, 0, 0, 0, 0]]
+Matrix({
+      container : '#confusionMatrix_NB',
+      data      : confusionMatrix_NB,
+      labels    : labels
+    });
+var confusionMatrix_NN =[[851, 1, 0, 0, 0], [250, 2, 0, 0, 0], [51, 1, 0, 0, 0], [21, 0, 0, 0, 0], [23, 0, 0, 0, 0]]
+Matrix({
+      container : '#confusionMatrix_NN',
+      data      : confusionMatrix_NN,
+      labels    : labels
+    });
+var confusionMatrix_DT =[[623, 149, 26, 9, 13], [180, 68, 7, 7, 5], [31, 16, 6, 1, 1], [8, 5, 3, 1, 3], [12, 2, 6, 7, 11]]
+Matrix({
+      container : '#confusionMatrix_DT',
+      data      : confusionMatrix_DT,
+      labels    : labels
+    });
+var confusionMatrix_RF =[[801, 42, 1, 1, 0], [234, 21, 3, 0, 0], [44, 7, 0, 0, 0], [15, 3, 0, 2, 0], [18, 2, 2, 2, 2]]
+Matrix({
+      container : '#confusionMatrix_RF',
+      data      : confusionMatrix_RF,
+      labels    : labels
+    });
+
+    </script>
+</html>
