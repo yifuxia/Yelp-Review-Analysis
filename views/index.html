@@ -97,7 +97,7 @@
     </div>
     <svg id="scatterPlot"></svg>
   </section>
-  
+
   <section style="text-align:center;width:100vw;">
       <div style="text-align:center;width:100vw;margin-bottom:50px" >
         <div style="text-align:left; width:60vw;margin-left:20vw">
@@ -153,7 +153,7 @@
     <div style="text-align:center;width:100vw;margin-bottom:50px" >
       <div style="text-align:left; width:60vw;margin-left:20vw">
         <h2>Rating prediction</h2>
-        <p>In this section, four supervised learning tasks using different classification model are conducted based on the reviews and ratings to help us predict customers' sentiments.I seperated data(5200 reviews) into 4000(randomly sampled) for training and 1200 for testing.The results are shown below:</p>
+        <p>In this section, four supervised learning tasks using different classification models are conducted based on the reviews and ratings to help us predict customers' sentiments.I seperated data(5200 reviews) into 4000(randomly sampled) for training and 1200 for testing.The results are shown below:</p>
       </div>
     </div>
     <div style="text-align:center; width:60.5vw;margin-left:20vw">
@@ -223,6 +223,13 @@
     $('#clickForMore').on('click',function(){
       $('#moreBody').css({'display':'block'})
     })
+/*
+
+
+Word cloud setup 
+
+
+*/
     function wordCloud(selector) {
 
     var fill = d3.scale.category20();
@@ -293,7 +300,14 @@
 function showNewWords(vis, wordList) {
     vis.update(wordList)
 }
+/*
 
+
+Word cloud setup END
+
+
+*/
+/*-------------------------------------------------------------------------------------------*/
 /*
 
 
@@ -419,6 +433,12 @@ d3.csv('data/wordRatings_wz_Counts.csv',function(d){
 })
 /*
 
+Scatter Plot END
+
+*/
+/*-------------------------------------------------------------------------------------------*/
+/*
+
 
 Word Cloud
 
@@ -456,6 +476,14 @@ $('#wordCloudSelector').change(function(){
   }
   
 }).change()
+/*
+
+
+Word Cloud END
+
+
+*/
+/*-------------------------------------------------------------------------------------------*/
 /*
 
 
@@ -648,6 +676,15 @@ Bar chart
 /*
 
 
+Bar chart END
+
+
+
+*/
+/*-----------------------------------------------------------------------------------*/
+/*
+
+
 Confusion Matrix
 
 
@@ -793,25 +830,30 @@ function Matrix(options) {
       .attr("text-anchor", "end")
       .text(function(d, i) { return d; });
 }
+
 var labels = ['5 star', '4 star', '3 star', '2 star', '1 star'];
+//Naive Bayes
 var confusionMatrix_NB = [[840, 0, 0, 0, 0], [251, 3, 0, 0, 0], [60, 1, 0, 0, 0], [16, 0, 0, 0, 0], [29, 0, 0, 0, 0]]
 Matrix({
       container : '#confusionMatrix_NB',
       data      : confusionMatrix_NB,
       labels    : labels
     });
+//Neural Network
 var confusionMatrix_NN =[[851, 1, 0, 0, 0], [250, 2, 0, 0, 0], [51, 1, 0, 0, 0], [21, 0, 0, 0, 0], [23, 0, 0, 0, 0]]
 Matrix({
       container : '#confusionMatrix_NN',
       data      : confusionMatrix_NN,
       labels    : labels
     });
+//Desicion Tree
 var confusionMatrix_DT =[[623, 149, 26, 9, 13], [180, 68, 7, 7, 5], [31, 16, 6, 1, 1], [8, 5, 3, 1, 3], [12, 2, 6, 7, 11]]
 Matrix({
       container : '#confusionMatrix_DT',
       data      : confusionMatrix_DT,
       labels    : labels
     });
+//Random Forest
 var confusionMatrix_RF =[[801, 42, 1, 1, 0], [234, 21, 3, 0, 0], [44, 7, 0, 0, 0], [15, 3, 0, 2, 0], [18, 2, 2, 2, 2]]
 Matrix({
       container : '#confusionMatrix_RF',
